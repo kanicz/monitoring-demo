@@ -1,0 +1,68 @@
+version: '3'
+networks:
+  main:
+    driver: bridge
+volumes:
+  mysql-volume:
+services:
+  monitoring-demo:
+    depends_on:
+      - mysql
+    build: .
+    ports:
+      - "8080:8080"
+    networks:
+      - main
+    environment:
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: pwd
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/demo?createDatabaseIfNotExist=true
+  mysql:
+    image: mysql:5.7.17
+    environment:
+      MYSQL_ROOT_PASSWORD: pwd
+    volumes:
+      - "mysql-volume:/var/lib/mysql"
+    ports:
+      - "3306:3306"
+    networks:
+      - main
+  mysqld-exporter:
+    image: prom/mysqld-exporter
+    ports:
+      - "9104:9104"
+    environment:
+      DATA_SOURCE_NAME: "root:pwd@(mysql:3306)/demo"
+    networks:
+      - main
+  grafana:
+    ports:
+      - "3000:3000"
+    networks:
+      - main
+    volumes:
+      - /var/lib/grafana
+    image: grafana/grafana
+  prometheus:
+    ports:
+      - "9090:9090"
+    networks:
+      - main
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    command:
+      - '-config.file=/etc/prometheus/prometheus.yml'
+    image: prom/prometheus
+  node-exporter:
+    image: prom/node-exporter
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command: '-collector.procfs=/host/proc -collector.sysfs=/host/sys -collector.filesystem.ignored-mount-points="^(/rootfs|/host|)/(sys|proc|dev|host|etc)($$|/)" collector.filesystem.ignored-fs-types="^(sys|proc|auto|cgroup|devpts|ns|au|fuse\.lxc|mqueue)(fs|)$$"'
+    expose:
+      - 9100
+    restart: always
+    networks:
+      - main
+    deploy:
