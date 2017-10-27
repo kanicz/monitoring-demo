@@ -5,18 +5,18 @@ networks:
 volumes:
   mysql-volume:
 services:
-  monitoring-demo:
-    depends_on:
-      - mysql
-    build: .
-    ports:
-      - "8080:8080"
-    networks:
-      - main
-    environment:
-      SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: pwd
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/demo?createDatabaseIfNotExist=true
+#  monitoring-demo:
+#    depends_on:
+#      - mysql
+#    build: .
+#    ports:
+#      - "8080:8080"
+#    networks:
+#      - main
+#    environment:
+#      SPRING_DATASOURCE_USERNAME: root
+#      SPRING_DATASOURCE_PASSWORD: pwd
+#      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/demo?createDatabaseIfNotExist=true
   mysql:
     image: mysql:5.7.17
     environment:
@@ -53,16 +53,16 @@ services:
     command:
       - '-config.file=/etc/prometheus/prometheus.yml'
     image: prom/prometheus
-  node-exporter:
-    image: prom/node-exporter
-    volumes:
-      - /proc:/host/proc:ro
-      - /sys:/host/sys:ro
-      - /:/rootfs:ro
-    command: '-collector.procfs=/host/proc -collector.sysfs=/host/sys -collector.filesystem.ignored-mount-points="^(/rootfs|/host|)/(sys|proc|dev|host|etc)($$|/)" collector.filesystem.ignored-fs-types="^(sys|proc|auto|cgroup|devpts|ns|au|fuse\.lxc|mqueue)(fs|)$$"'
-    expose:
-      - 9100
-    restart: always
-    networks:
-      - main
-    deploy:
+#  node-exporter:
+#    image: prom/node-exporter
+#    volumes:
+#      - /proc:/host/proc:ro
+#      - /sys:/host/sys:ro
+#      - /:/rootfs:ro
+#    command: '-collector.procfs=/host/proc -collector.sysfs=/host/sys -collector.filesystem.ignored-mount-points="^(/rootfs|/host|)/(sys|proc|dev|host|etc)($$|/)" collector.filesystem.ignored-fs-types="^(sys|proc|auto|cgroup|devpts|ns|au|fuse\.lxc|mqueue)(fs|)$$"'
+#    expose:
+#      - 9100
+#    restart: always
+#    networks:
+#      - main
+#    deploy:
