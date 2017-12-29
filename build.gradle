@@ -1,6 +1,6 @@
 buildscript {
     ext {
-        springBootVersion = '1.5.7.RELEASE'
+        springBootVersion = '1.5.9.RELEASE'
     }
     repositories {
         mavenCentral()
@@ -29,7 +29,7 @@ dependencies {
     compile('org.springframework.boot:spring-boot-starter-data-jpa')
     compile('org.springframework.boot:spring-boot-starter-web')
     compile('io.micrometer:micrometer-spring-legacy:latest.release')
-    compile("io.micrometer:micrometer-registry-prometheus:1.0.0-rc.2")
+    compile("io.micrometer:micrometer-registry-prometheus:1.0.0-rc.5")
     runtime('mysql:mysql-connector-java')
     compileOnly('org.projectlombok:lombok')
     testCompile('org.springframework.boot:spring-boot-starter-test')
